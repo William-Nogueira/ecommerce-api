@@ -50,5 +50,21 @@ public class ProdutoController {
     public void delete(@PathVariable long id) {
         repository.deleteById(id);
     }
-    
+
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<List<Produto>> findByCategoria(@PathVariable("categoria") String categoriaString) {
+        try {
+            Categoria categoria = Categoria.valueOf(categoriaString.toUpperCase());
+            List<Produto> produtos = repository.findAllByCategoria(categoria);
+            return ResponseEntity.ok(produtos);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/marca/{marca}")
+    public List<Produto> findByMarca(@PathVariable("marca") String marca) {
+        return repository.findAllByMarcaProduto(marca);
+    }
+
 }
