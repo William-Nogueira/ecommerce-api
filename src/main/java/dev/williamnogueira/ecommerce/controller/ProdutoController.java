@@ -5,6 +5,10 @@ import dev.williamnogueira.ecommerce.model.Produto;
 import dev.williamnogueira.ecommerce.repository.ProdutoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +26,9 @@ public class ProdutoController {
     private ProdutoRepository repository;
 
     @GetMapping
-    public List<Produto> findAll() {
-        return repository.findAll();
+    public Page<Produto> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.findAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -48,23 +53,35 @@ public class ProdutoController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) {
+        if (!repository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado.");
+        }
         repository.deleteById(id);
     }
 
     @GetMapping("/categoria/{categoria}")
-    public ResponseEntity<List<Produto>> findByCategoria(@PathVariable("categoria") String categoriaString) {
+    public ResponseEntity<Page<Produto>> findByCategoria(@PathVariable("categoria") String categoriaString,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "100") int size) {
         try {
             Categoria categoria = Categoria.valueOf(categoriaString.toUpperCase());
-            List<Produto> produtos = repository.findAllByCategoria(categoria);
-            return ResponseEntity.ok(produtos);
+            Pageable pageable = PageRequest.of(page, size);
+            List<Produto> produtosList = repository.findAllByCategoria(categoria, pageable);
+            Page<Produto> produtosPage = new PageImpl<>(produtosList, pageable, produtosList.size());
+            return ResponseEntity.ok(produtosPage);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @GetMapping("/marca/{marca}")
-    public List<Produto> findByMarca(@PathVariable("marca") String marca) {
-        return repository.findAllByMarcaProduto(marca);
+    public ResponseEntity<Page<Produto>> findByMarca(@PathVariable("marca") String marca,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "100") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Produto> produtosList = repository.findAllByMarcaProduto(marca, pageable);
+        Page<Produto> produtosPage = new PageImpl<>(produtosList, pageable, produtosList.size());
+        return ResponseEntity.ok(produtosPage);
     }
 
 }
