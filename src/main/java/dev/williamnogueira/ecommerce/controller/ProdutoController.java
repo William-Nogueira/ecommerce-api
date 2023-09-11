@@ -42,7 +42,6 @@ public class ProdutoController {
         repository.save(produto);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void update(@Valid @RequestBody Produto produto, @PathVariable long id) {
         if (!repository.existsById(id)) {
@@ -50,7 +49,7 @@ public class ProdutoController {
         }
         repository.save(produto);
     }
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) {
         if (!repository.existsById(id)) {
