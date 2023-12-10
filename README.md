@@ -1,19 +1,9 @@
 ## E-Commerce API
 
-API REST para um e-commerce de tecnologia desenvolvida utilizando Spring Boot 3 e MySQL. Permite que o usuário acesse e gerencie informações sobre produtos a venda, incluindo consultas com filtragem e paginação, criação, atualização e exclusão de produtos (CRUD completo). Hospedado em servidores cloud.
-
-Live - https://ecommerce-api.hop.sh/api/produtos
+API REST para um e-commerce de tecnologia desenvolvida utilizando Spring Boot 3 e MySQL. Permite que o usuário acesse e gerencie informações sobre produtos a venda, incluindo consultas com filtragem e paginação, criação, atualização e exclusão de produtos (CRUD completo). 
 
 ---
 # Documentação da API
-
-## Base URL
-
-A base URL para todas as solicitações é:
-
-```assembly
-https://ecommerce-api.hop.sh/api/produtos
-```
 
 ## Endpoints Disponíveis
 
