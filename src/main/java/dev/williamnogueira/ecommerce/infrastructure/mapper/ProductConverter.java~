@@ -1,0 +1,33 @@
+package dev.williamnogueira.ecommerce.infrastructure.converter;
+
+import dev.williamnogueira.ecommerce.model.ProductEntity;
+import dev.williamnogueira.ecommerce.model.dto.ProductRequestDTO;
+import dev.williamnogueira.ecommerce.model.dto.ProductResponseDTO;
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class ProductConverter {
+
+    public static ProductEntity toEntity(ProductRequestDTO dto) {
+        return new ProductEntity(
+                dto.sku(),
+                dto.name(),
+                dto.label(),
+                dto.category(),
+                dto.price(),
+                dto.discount(),
+                dto.installments());
+    }
+
+    public static ProductResponseDTO toResponseDTO(ProductEntity entity) {
+        return new ProductResponseDTO(
+                entity.getId(),
+                entity.getCategory(),
+                entity.getName(),
+                entity.getLabel(),
+                entity.getPrice(),
+                entity.getDiscount(),
+                entity.getInstallments());
+    }
+
+}

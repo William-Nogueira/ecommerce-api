@@ -11,6 +11,4 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 
 # Logging configuration
 logging.level.dev.williamnogueira.ecommerce=WARN
-logging.file.name=logs/application.log
-logging.file.path=logs
 logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
