@@ -1,13 +1,10 @@
-package dev.williamnogueira.ecommerce.service;
+package dev.williamnogueira.ecommerce.domain.product;
 
-import dev.williamnogueira.ecommerce.infrastructure.mapper.ProductMapper;
 import dev.williamnogueira.ecommerce.infrastructure.exceptions.DuplicateProductException;
+import dev.williamnogueira.ecommerce.infrastructure.exceptions.InvalidCategoryException;
 import dev.williamnogueira.ecommerce.infrastructure.exceptions.ProductNotFoundException;
-import dev.williamnogueira.ecommerce.model.CategoryEnum;
-import dev.williamnogueira.ecommerce.model.ProductEntity;
-import dev.williamnogueira.ecommerce.model.dto.ProductRequestDTO;
-import dev.williamnogueira.ecommerce.model.dto.ProductResponseDTO;
-import dev.williamnogueira.ecommerce.repository.ProductRepository;
+import dev.williamnogueira.ecommerce.domain.product.dto.ProductRequestDTO;
+import dev.williamnogueira.ecommerce.domain.product.dto.ProductResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 import java.util.UUID;
 
-import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.PRODUCT_NOT_FOUND_WITH_ID;
-import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.SKU_ALREADY_EXISTS;
+import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.*;
 
 @Service
 @AllArgsConstructor
@@ -40,8 +36,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductResponseDTO> findAllByCategory(CategoryEnum category, Pageable pageable) {
-        return productRepository.findAllByCategoryIgnoreCaseAndActiveTrue(category, pageable)
+    public Page<ProductResponseDTO> findAllByCategory(String category, Pageable pageable) {
+        return productRepository.findAllByCategoryIgnoreCaseAndActiveTrue(validateCategory(category), pageable)
                 .map(productMapper::toResponseDTO);
     }
 
@@ -58,6 +54,8 @@ public class ProductService {
             throw new DuplicateProductException(SKU_ALREADY_EXISTS);
         }
 
+        validateCategory(product.category());
+
         return productMapper.toResponseDTO(productRepository.save(productMapper.toEntity(product)));
     }
 
@@ -71,6 +69,7 @@ public class ProductService {
             throw new DuplicateProductException(SKU_ALREADY_EXISTS);
         }
 
+        validateCategory(product.category());
         updateEntityFields(entity, product);
 
         return productMapper.toResponseDTO(productRepository.save(entity));
@@ -89,10 +88,18 @@ public class ProductService {
         entity.setSku(product.sku());
         entity.setName(product.name());
         entity.setLabel(product.label());
-        entity.setCategory(product.category());
+        entity.setCategory(validateCategory(product.category()));
         entity.setPrice(product.price());
         entity.setDiscount(product.discount());
         entity.setInstallments(product.installments());
+    }
+
+    private ProductCategoryEnum validateCategory(String category) {
+        try {
+            return ProductCategoryEnum.valueOf(category.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidCategoryException(String.format(INVALID_CATEGORY, category));
+        }
     }
 
 }

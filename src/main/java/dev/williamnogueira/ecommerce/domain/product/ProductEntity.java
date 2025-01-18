@@ -1,4 +1,4 @@
-package dev.williamnogueira.ecommerce.model;
+package dev.williamnogueira.ecommerce.domain.product;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductEntity {
+class ProductEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
         private UUID id;
@@ -30,7 +30,7 @@ public class ProductEntity {
 
         @Enumerated(value = EnumType.STRING)
         @Column(nullable = false)
-        private CategoryEnum category;
+        private ProductCategoryEnum category;
 
         @Column(nullable = false)
         private BigDecimal price;

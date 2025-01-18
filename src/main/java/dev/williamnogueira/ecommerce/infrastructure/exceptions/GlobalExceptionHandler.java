@@ -32,16 +32,22 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }
 
+    @ExceptionHandler(InvalidCategoryException.class)
+    public ResponseEntity<Object> handleInvalidCategoryException(InvalidCategoryException ex, WebRequest request) {
+        log.error(INVALID_CATEGORY_EXCEPTION, ex.getMessage(), ex);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, request);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Object> handleMissingRequestBody(HttpMessageNotReadableException ex, WebRequest request) {
         log.error(REQUEST_BODY_MISSING_EXCEPTION, ex.getMessage(), ex);
-        return buildErrorResponse(REQUEST_BODY_MISSING_ERROR, HttpStatus.BAD_REQUEST, request);
+        return buildErrorResponse(REQUEST_BODY_MISSING, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {
         log.error(VALIDATION_FAILED_EXCEPTION, ex.getMessage(), ex);
-        return buildErrorResponse(VALIDATION_FAILED_ERROR, HttpStatus.BAD_REQUEST, request);
+        return buildErrorResponse(VALIDATION_FAILED, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(Exception.class)

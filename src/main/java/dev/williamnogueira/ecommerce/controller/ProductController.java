@@ -1,9 +1,8 @@
 package dev.williamnogueira.ecommerce.controller;
 
-import dev.williamnogueira.ecommerce.model.CategoryEnum;
-import dev.williamnogueira.ecommerce.model.dto.ProductRequestDTO;
-import dev.williamnogueira.ecommerce.model.dto.ProductResponseDTO;
-import dev.williamnogueira.ecommerce.service.ProductService;
+import dev.williamnogueira.ecommerce.domain.product.dto.ProductRequestDTO;
+import dev.williamnogueira.ecommerce.domain.product.dto.ProductResponseDTO;
+import dev.williamnogueira.ecommerce.domain.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<Page<ProductResponseDTO>> findByCategory(@PathVariable("category") CategoryEnum category, Pageable pageable) {
+    public ResponseEntity<Page<ProductResponseDTO>> findByCategory(@PathVariable("category") String category, Pageable pageable) {
         return ResponseEntity.ok(productService.findAllByCategory(category, pageable));
     }
 
@@ -55,8 +54,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateById(@PathVariable UUID id, @Valid @RequestBody ProductRequestDTO product) {
-        var updatedProduct = productService.updateById(id, product);
-        return ResponseEntity.ok(updatedProduct);
+        return ResponseEntity.ok(productService.updateById(id, product));
     }
 
     @DeleteMapping("/{id}")

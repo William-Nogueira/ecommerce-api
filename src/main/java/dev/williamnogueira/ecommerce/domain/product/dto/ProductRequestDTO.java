@@ -1,6 +1,5 @@
-package dev.williamnogueira.ecommerce.model.dto;
+package dev.williamnogueira.ecommerce.domain.product.dto;
 
-import dev.williamnogueira.ecommerce.model.CategoryEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -14,7 +13,7 @@ public record ProductRequestDTO(@NotBlank
                                 @NotBlank
                                 String label,
                                 @NotNull
-                                CategoryEnum category,
+                                String category,
                                 @NotNull
                                 BigDecimal price,
                                 @NotNull

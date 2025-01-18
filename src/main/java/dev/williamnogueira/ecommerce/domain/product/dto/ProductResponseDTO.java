@@ -1,6 +1,4 @@
-package dev.williamnogueira.ecommerce.model.dto;
-
-import dev.williamnogueira.ecommerce.model.CategoryEnum;
+package dev.williamnogueira.ecommerce.domain.product.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -9,7 +7,7 @@ public record ProductResponseDTO(UUID id,
                                  String sku,
                                  String name,
                                  String label,
-                                 CategoryEnum category,
+                                 String category,
                                  BigDecimal price,
                                  BigDecimal discount,
                                  Byte installments) {

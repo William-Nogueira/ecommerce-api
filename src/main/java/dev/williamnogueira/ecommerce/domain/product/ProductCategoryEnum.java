@@ -1,6 +1,6 @@
-package dev.williamnogueira.ecommerce.model;
+package dev.williamnogueira.ecommerce.domain.product;
 
-public enum CategoryEnum {
+enum ProductCategoryEnum {
     DESKTOP,
     LAPTOP,
     SMARTPHONE,
@@ -13,5 +13,5 @@ public enum CategoryEnum {
     RAM,
     HD,
     SSD,
-    OTHER;
+    OTHER
 }
