@@ -2,11 +2,13 @@ package dev.williamnogueira.ecommerce.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Entity
+@Builder
+@Entity(name = "Product")
 @Table(name = "product")
 @Getter
 @Setter
@@ -40,16 +42,6 @@ public class ProductEntity {
         private Byte installments;
 
         @Column(nullable = false)
-        private Boolean active = true;
-
-        public ProductEntity(String sku, String name, String label, CategoryEnum category, BigDecimal price, BigDecimal discount, Byte installments) {
-                this.sku = sku;
-                this.name = name;
-                this.label = label;
-                this.category = category;
-                this.price = price;
-                this.discount = discount;
-                this.installments = installments;
-                this.active = true;
-        }
+        @ColumnDefault("true")
+        private Boolean active;
 }

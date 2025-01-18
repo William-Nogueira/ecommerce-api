@@ -7,22 +7,23 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DATABASE=mysql:3306/ecommerce
-      - DB_USER=root
-      - DB_PASSWORD=root
+      - DATABASE=postgres:5432/ecommerce
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
     depends_on:
-      - mysql
+      - postgres
     networks:
       - app-network
 
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
+  postgres:
+    image: postgres:14
+    container_name: postgres
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ecommerce
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ecommerce
     ports:
-      - "3306:3306"
+      - "5432:5432"
     networks:
       - app-network
 

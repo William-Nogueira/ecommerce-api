@@ -20,6 +20,9 @@ logs/
 *.iml
 *.ipr
 *.java~
+*.sql~
+*.properties~
+*.xml~
 
 ### NetBeans ###
 /nbproject/private/

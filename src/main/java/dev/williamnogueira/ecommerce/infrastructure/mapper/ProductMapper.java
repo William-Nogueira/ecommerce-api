@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 public interface ProductMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "active", ignore = true)
+    @Mapping(target = "active", defaultValue = "true")
     ProductEntity toEntity(ProductRequestDTO dto);
 
     ProductResponseDTO toResponseDTO(ProductEntity entity);
