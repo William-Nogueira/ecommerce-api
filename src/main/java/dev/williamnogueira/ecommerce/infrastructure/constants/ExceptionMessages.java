@@ -11,5 +11,7 @@ public class ExceptionMessages {
     public static final String REQUEST_BODY_MISSING_EXCEPTION = "Request body is missing or malformed: {}";
     public static final String VALIDATION_FAILED_EXCEPTION = "Validation failed for one or more fields: {}";
     public static final String INVALID_CATEGORY_EXCEPTION = "Invalid category: {}";
+    public static final String CUSTOMER_NOT_FOUND_EXCEPTION = "Customer not found exception: {}";
+    public static final String ADDRESS_NOT_FOUND_EXCEPTION = "Address not found exception: {}";
 
 }

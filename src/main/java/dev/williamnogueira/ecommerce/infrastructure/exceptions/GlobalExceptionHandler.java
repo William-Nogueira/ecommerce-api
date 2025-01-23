@@ -1,5 +1,10 @@
 package dev.williamnogueira.ecommerce.infrastructure.exceptions;
 
+import dev.williamnogueira.ecommerce.domain.address.exceptions.AddressNotFoundException;
+import dev.williamnogueira.ecommerce.domain.address.exceptions.DuplicateProductException;
+import dev.williamnogueira.ecommerce.domain.address.exceptions.InvalidCategoryException;
+import dev.williamnogueira.ecommerce.domain.address.exceptions.ProductNotFoundException;
+import dev.williamnogueira.ecommerce.domain.customer.exceptions.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +18,8 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.*;
+import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.REQUEST_BODY_MISSING;
+import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.VALIDATION_FAILED;
 import static dev.williamnogueira.ecommerce.infrastructure.constants.ExceptionMessages.*;
 
 @ControllerAdvice
@@ -29,6 +35,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException ex, WebRequest request) {
         log.warn(PRODUCT_NOT_FOUND_EXCEPTION, ex.getMessage(), ex);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleCustomerNotFoundException(CustomerNotFoundException ex, WebRequest request) {
+        log.warn(CUSTOMER_NOT_FOUND_EXCEPTION, ex.getMessage(), ex);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleAddressNotFoundException(AddressNotFoundException ex, WebRequest request) {
+        log.warn(ADDRESS_NOT_FOUND_EXCEPTION, ex.getMessage(), ex);
         return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }
 

@@ -1,8 +1,8 @@
 package dev.williamnogueira.ecommerce.domain.product;
 
-import dev.williamnogueira.ecommerce.infrastructure.exceptions.DuplicateProductException;
-import dev.williamnogueira.ecommerce.infrastructure.exceptions.InvalidCategoryException;
-import dev.williamnogueira.ecommerce.infrastructure.exceptions.ProductNotFoundException;
+import dev.williamnogueira.ecommerce.domain.address.exceptions.DuplicateProductException;
+import dev.williamnogueira.ecommerce.domain.address.exceptions.InvalidCategoryException;
+import dev.williamnogueira.ecommerce.domain.address.exceptions.ProductNotFoundException;
 import dev.williamnogueira.ecommerce.domain.product.dto.ProductRequestDTO;
 import dev.williamnogueira.ecommerce.domain.product.dto.ProductResponseDTO;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 import java.util.UUID;
 
-import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.*;
+import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.INVALID_CATEGORY;
+import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.PRODUCT_NOT_FOUND_WITH_ID;
+import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.SKU_ALREADY_EXISTS;
 
 @Service
 @AllArgsConstructor
@@ -62,8 +64,7 @@ public class ProductService {
     @Transactional
     public ProductResponseDTO updateById(UUID id, ProductRequestDTO product) {
 
-        var entity = productRepository.findById(id).orElseThrow(
-                () -> new ProductNotFoundException(String.format(PRODUCT_NOT_FOUND_WITH_ID, id)));
+        var entity = getEntity(id);
 
         if (!Objects.equals(entity.getSku(), product.sku()) && productRepository.existsBySku(product.sku())) {
             throw new DuplicateProductException(SKU_ALREADY_EXISTS);
@@ -82,6 +83,11 @@ public class ProductService {
 
         product.setActive(false);
         productRepository.save(product);
+    }
+
+    public ProductEntity getEntity(UUID id) {
+        return productRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new ProductNotFoundException(String.format(PRODUCT_NOT_FOUND_WITH_ID, id)));
     }
 
     private void updateEntityFields(ProductEntity entity, ProductRequestDTO product) {
