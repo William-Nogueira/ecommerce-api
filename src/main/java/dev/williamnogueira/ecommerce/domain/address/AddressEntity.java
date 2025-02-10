@@ -61,4 +61,3 @@ public class AddressEntity {
     @JoinColumn(name = "customer", nullable = false)
     private CustomerEntity customer;
 }
-

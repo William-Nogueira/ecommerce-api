@@ -39,6 +39,11 @@ public class AddressService {
         return addressMapper.toResponseDTO(addressRepository.save(entity));
     }
 
+    public AddressEntity getEntity(UUID id) {
+        return addressRepository.findById(id)
+                .orElseThrow(() -> new AddressNotFoundException(String.format(ADDRESS_NOT_FOUND_WITH_ID, id)));
+    }
+
     private void updateEntityFields(AddressEntity entity, AddressRequestDTO address) {
         entity.setCustomer(customerService.getEntity(address.customer()));
         entity.setStreet(address.street());
@@ -51,10 +56,4 @@ public class AddressService {
         entity.setType(AddressTypeEnum.valueOf(address.type()));
         entity.setAdditionalInfo(address.additionalInfo());
     }
-
-    public AddressEntity getEntity(UUID id) {
-        return addressRepository.findById(id)
-                .orElseThrow(() -> new AddressNotFoundException(String.format(ADDRESS_NOT_FOUND_WITH_ID, id)));
-    }
-
 }

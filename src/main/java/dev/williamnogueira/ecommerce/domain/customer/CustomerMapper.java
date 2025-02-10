@@ -1,12 +1,13 @@
 package dev.williamnogueira.ecommerce.domain.customer;
 
+import dev.williamnogueira.ecommerce.domain.address.AddressMapper;
 import dev.williamnogueira.ecommerce.domain.customer.dto.CustomerRequestDTO;
 import dev.williamnogueira.ecommerce.domain.customer.dto.CustomerResponseDTO;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = AddressMapper.class)
 public interface CustomerMapper {
 
     @Mapping(target = "id", ignore = true)

@@ -44,5 +44,4 @@ public class CustomerEntity {
     @Column(nullable = false)
     @ColumnDefault("true")
     private Boolean active;
-
 }

@@ -30,20 +30,22 @@ public class CustomerService {
 
     @Transactional(readOnly = true)
     public CustomerResponseDTO findById(UUID id) {
-        return customerRepository.findByIdAndActiveTrue(id)
-                .map(customerMapper::toResponseDTO)
-                .orElseThrow(() -> new CustomerNotFoundException(String.format(CUSTOMER_NOT_FOUND_WITH_ID, id)));
+        var entity = getEntity(id);
+        return customerMapper.toResponseDTO(entity);
     }
 
     @Transactional
     public CustomerResponseDTO create(CustomerRequestDTO customer) {
-        return customerMapper.toResponseDTO(customerRepository.save(customerMapper.toEntityWithAddresses(customer)));
+        var entity = customerMapper.toEntityWithAddresses(customer);
+        return customerMapper.toResponseDTO(customerRepository.save(entity));
     }
 
     @Transactional
     public CustomerResponseDTO updateById(UUID id, @Valid CustomerRequestDTO customer) {
         var entity = getEntity(id);
+
         updateEntityFields(entity, customer);
+
         return customerMapper.toResponseDTO(customerRepository.save(entity));
     }
 

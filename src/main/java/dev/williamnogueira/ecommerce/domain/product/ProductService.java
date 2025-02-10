@@ -1,17 +1,17 @@
 package dev.williamnogueira.ecommerce.domain.product;
 
-import dev.williamnogueira.ecommerce.domain.address.exceptions.DuplicateProductException;
-import dev.williamnogueira.ecommerce.domain.address.exceptions.InvalidCategoryException;
-import dev.williamnogueira.ecommerce.domain.address.exceptions.ProductNotFoundException;
+import dev.williamnogueira.ecommerce.domain.product.exceptions.DuplicateProductException;
+import dev.williamnogueira.ecommerce.domain.product.exceptions.InvalidCategoryException;
+import dev.williamnogueira.ecommerce.domain.product.exceptions.ProductNotFoundException;
 import dev.williamnogueira.ecommerce.domain.product.dto.ProductRequestDTO;
 import dev.williamnogueira.ecommerce.domain.product.dto.ProductResponseDTO;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.INVALID_CATEGORY;
@@ -32,9 +32,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductResponseDTO findById(UUID id) {
-        return productRepository.findByIdAndActiveTrue(id)
-                .map(productMapper::toResponseDTO)
-                .orElseThrow(() -> new ProductNotFoundException(String.format(PRODUCT_NOT_FOUND_WITH_ID, id)));
+        return productMapper.toResponseDTO(getEntity(id));
     }
 
     @Transactional(readOnly = true)
@@ -52,7 +50,7 @@ public class ProductService {
     @Transactional
     public ProductResponseDTO create(ProductRequestDTO product) {
 
-        if (productRepository.existsBySku(product.sku())) {
+        if (verifyIfThisSkuAlreadyExists(product.sku())) {
             throw new DuplicateProductException(SKU_ALREADY_EXISTS);
         }
 
@@ -66,7 +64,7 @@ public class ProductService {
 
         var entity = getEntity(id);
 
-        if (!Objects.equals(entity.getSku(), product.sku()) && productRepository.existsBySku(product.sku())) {
+        if (ObjectUtils.notEqual(entity.getSku(), product.sku()) && verifyIfThisSkuAlreadyExists(product.sku())) {
             throw new DuplicateProductException(SKU_ALREADY_EXISTS);
         }
 
@@ -106,6 +104,10 @@ public class ProductService {
         } catch (IllegalArgumentException e) {
             throw new InvalidCategoryException(String.format(INVALID_CATEGORY, category));
         }
+    }
+
+    private boolean verifyIfThisSkuAlreadyExists(String sku) {
+        return productRepository.existsBySku(sku);
     }
 
 }

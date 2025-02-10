@@ -1,9 +1,9 @@
 package dev.williamnogueira.ecommerce.infrastructure.exceptions;
 
 import dev.williamnogueira.ecommerce.domain.address.exceptions.AddressNotFoundException;
-import dev.williamnogueira.ecommerce.domain.address.exceptions.DuplicateProductException;
-import dev.williamnogueira.ecommerce.domain.address.exceptions.InvalidCategoryException;
-import dev.williamnogueira.ecommerce.domain.address.exceptions.ProductNotFoundException;
+import dev.williamnogueira.ecommerce.domain.product.exceptions.DuplicateProductException;
+import dev.williamnogueira.ecommerce.domain.product.exceptions.InvalidCategoryException;
+import dev.williamnogueira.ecommerce.domain.product.exceptions.ProductNotFoundException;
 import dev.williamnogueira.ecommerce.domain.customer.exceptions.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
