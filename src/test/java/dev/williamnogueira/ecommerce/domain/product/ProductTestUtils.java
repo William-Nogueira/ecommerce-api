@@ -31,6 +31,7 @@ public class ProductTestUtils {
                 "CPU",
                 new BigDecimal(1200),
                 new BigDecimal(10),
+                10,
                 (byte) 2);
     }
 
@@ -42,6 +43,7 @@ public class ProductTestUtils {
                 new BigDecimal(1200),
                 new BigDecimal(10),
                 (byte) 2,
+                10,
                 true);
     }
 
@@ -53,6 +55,7 @@ public class ProductTestUtils {
                 new BigDecimal(1200),
                 new BigDecimal(10),
                 (byte) 2,
+                10,
                 true);
     }
 
@@ -64,6 +67,7 @@ public class ProductTestUtils {
                 new BigDecimal(1200),
                 new BigDecimal(10),
                 (byte) 2,
+                10,
                 true);
     }
 }

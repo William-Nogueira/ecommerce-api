@@ -1,6 +1,8 @@
 package dev.williamnogueira.ecommerce.domain.customer.exceptions;
 
-public class CustomerNotFoundException extends RuntimeException {
+import dev.williamnogueira.ecommerce.infrastructure.exceptions.NotFoundException;
+
+public class CustomerNotFoundException extends NotFoundException {
     public CustomerNotFoundException(String message) {
         super(message);
     }

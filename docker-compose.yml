@@ -10,8 +10,11 @@ services:
       - DATABASE=postgres:5432/ecommerce
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+      - KAFKA_BROKER=kafka:9092
+      - PAYMENT_API_URL=https://echo.zuplo.io
     depends_on:
       - postgres
+      - kafka
     networks:
       - app-network
 
@@ -24,6 +27,27 @@ services:
       POSTGRES_DB: ecommerce
     ports:
       - "5432:5432"
+    networks:
+      - app-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - app-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
     networks:
       - app-network
 

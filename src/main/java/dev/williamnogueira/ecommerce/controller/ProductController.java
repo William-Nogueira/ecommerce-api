@@ -65,6 +65,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateById(id, product));
     }
 
+    @PutMapping("/stock/{id}/{quantity}")
+    public ResponseEntity<ProductResponseDTO> addStockById(@PathVariable UUID id, @PathVariable Integer quantity) {
+        return ResponseEntity.ok(productService.addStockById(id, quantity));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         productService.deleteById(id);

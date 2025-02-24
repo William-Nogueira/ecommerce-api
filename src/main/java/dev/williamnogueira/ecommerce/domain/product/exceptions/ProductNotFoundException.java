@@ -1,6 +1,8 @@
 package dev.williamnogueira.ecommerce.domain.product.exceptions;
 
-public class ProductNotFoundException extends RuntimeException {
+import dev.williamnogueira.ecommerce.infrastructure.exceptions.NotFoundException;
+
+public class ProductNotFoundException extends NotFoundException {
     public ProductNotFoundException(String message) {
         super(message);
     }

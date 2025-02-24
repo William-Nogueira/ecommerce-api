@@ -1,6 +1,8 @@
 package dev.williamnogueira.ecommerce.domain.product.exceptions;
 
-public class DuplicateProductException extends RuntimeException {
+import dev.williamnogueira.ecommerce.infrastructure.exceptions.ConflictException;
+
+public class DuplicateProductException extends ConflictException {
     public DuplicateProductException(String message) {
         super(message);
     }

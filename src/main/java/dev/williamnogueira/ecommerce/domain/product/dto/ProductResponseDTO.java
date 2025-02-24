@@ -10,5 +10,6 @@ public record ProductResponseDTO(UUID id,
                                  String category,
                                  BigDecimal price,
                                  BigDecimal discount,
+                                 Integer stockQuantity,
                                  Byte installments) {
 }

@@ -76,10 +76,24 @@ public class ProductService {
 
     @Transactional
     public void deleteById(UUID id) {
-        var product = productRepository.findByIdAndActiveTrue(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format(PRODUCT_NOT_FOUND_WITH_ID, id)));
+        var product = getEntity(id);
 
         product.setActive(false);
+        productRepository.save(product);
+    }
+
+    @Transactional
+    public ProductResponseDTO addStockById(UUID id, Integer quantity) {
+        var product = getEntity(id);
+        product.setStockQuantity(product.getStockQuantity() + quantity);
+        productRepository.save(product);
+        return productMapper.toResponseDTO(product);
+    }
+
+    @Transactional
+    public void subtractStockQuantity(UUID id, Integer quantity) {
+        var product = getEntity(id);
+        product.setStockQuantity(product.getStockQuantity() - quantity);
         productRepository.save(product);
     }
 

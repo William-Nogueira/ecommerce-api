@@ -12,5 +12,11 @@ public class ErrorMessages {
     public static final String VALIDATION_FAILED = "Validation failed for one or more fields";
     public static final String CUSTOMER_NOT_FOUND_WITH_ID = "Customer with id %s not found.";
     public static final String ADDRESS_NOT_FOUND_WITH_ID = "Address with id %s not found.";
-
+    public static final String ORDER_NOT_FOUND_WITH_ID = "Order with id %s not found.";
+    public static final String SHOPPING_CART_IS_EMPTY = "The shopping cart is empty.";
+    public static final String ADDRESS_NOT_FOUND = "Address not found for the given customer.";
+    public static final String QUANTITY_GREATER_THAN_AVAILABLE = "The quantity is greater than the available quantity.";
+    public static final String SHOPPING_CART_NOT_FOUND_WITH_ID = "Shopping cart with id %s not found.";
+    public static final String NEGATIVE_QUANTITY = "The remaining quantity must be greater than zero.";
+    public static final String ERROR_PROCESSING_PAYMENT = "Error processing payment for order %s: %s";
 }

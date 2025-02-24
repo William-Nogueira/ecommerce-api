@@ -1,6 +1,6 @@
 package dev.williamnogueira.ecommerce.domain.product;
 
-enum ProductCategoryEnum {
+public enum ProductCategoryEnum {
     DESKTOP,
     LAPTOP,
     SMARTPHONE,

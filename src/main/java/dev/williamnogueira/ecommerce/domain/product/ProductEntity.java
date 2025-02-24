@@ -49,7 +49,10 @@ public class ProductEntity {
     
     @Column(nullable = false)
     private Byte installments;
-    
+
+    @Column(nullable = false)
+    private Integer stockQuantity;
+
     @Column(nullable = false)
     @ColumnDefault("true")
     private Boolean active;

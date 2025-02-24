@@ -3,7 +3,7 @@ FROM openjdk:17-jdk-slim AS build
 RUN apt-get update && apt-get install -y \
     maven \
     git \
-    && rm -rf /var/lib/apt/lists/*  # Clean up unnecessary files
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
