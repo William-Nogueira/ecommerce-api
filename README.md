@@ -1,171 +1,50 @@
-## E-Commerce API
+# Ecommerce API
 
-API REST para um e-commerce de tecnologia desenvolvida utilizando Spring Boot 3 e MySQL. Permite que o usuário acesse e gerencie informações sobre produtos a venda, incluindo consultas com filtragem e paginação, criação, atualização e exclusão de produtos (CRUD completo). 
+This is a Java-based ecommerce API project, built using Spring Boot and Docker. The project provides a RESTful API for managing ecommerce-related data, including products, customers, orders, and payments, following the latest best practices.
 
----
-# Documentação da API
+## Getting Started
 
-## Endpoints Disponíveis
+To run the API, you can use the provided `docker-compose.yml` file to spin up the necessary containers. Simply navigate to the root directory of the project and run the following command:
 
-### Listar Todos os Produtos
-
-#### Endpoint
-
-```http
-GET /api/produtos
+```bash
+docker-compose up
 ```
 
-Retorna uma lista de todos os produtos disponíveis.
+This will start the API, as well as the required Postgres and Kafka containers.
 
-#### Parâmetros de Solicitação com Paginação
+## API Documentation
 
-- `page` - Número da página desejada (padrão é 0).
-- `size` - Tamanho da página (padrão é 100).
+The API documentation can be found at [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html). This page provides a interactive interface for exploring the API endpoints and testing requests.
 
-#### Exemplo de Solicitação com Paginação
+## Best Practices
 
-```http
-GET /api/produtos?page=0&size=10
-```
-#
-### Consultar Produto por ID
+This project follows best practices for software development, including:
 
-#### Endpoint
+* **RESTful API Design**: The API follows standard RESTful principles, including the use of HTTP verbs (GET, POST, PUT, DELETE), resource-based URLs, standard HTTP status codes and proper error handling.
+* **Spring Actuator**: The project uses Spring Actuator to provide production-ready features such as monitoring, metrics, and auditing.
+* **Separation of Concerns**: The API is divided into separate modules for each domain entity, making it easy to maintain and extend.
+* **Test-Driven Development**: The project includes a comprehensive set of unit tests and integration tests to ensure the API is reliable and stable.
+* **Code Quality**: The code is written in a clean, readable, and maintainable style, following standard Java coding conventions.
+* **Scalability**: The API is designed to scale horizontally, making it easy to add more instances as traffic increases.
 
-```http
-GET /api/produtos/{id}
-```
+## Dependencies
 
-Retorna informações sobre um produto específico com base no ID fornecido.
+The project uses the following dependencies:
 
-#### Exemplo de Solicitação
+* Java 17
+* Spring Boot 3.4.1
+* Postgres 14
+* Spring Kafka 3.3.1
+* Mapstruct 1.5.3.Final
+* Flyway 10.20.1
+* Lombok 1.18.36
+* Springdoc 2.8.5
+* Docker 3.8
 
-```http
-GET /api/produtos/8
-```
-#
-### Consultar Produtos por Categoria
+## Contributing
 
-#### Endpoint
+Contributions are welcome! If you'd like to contribute to the project, please fork the repository and submit a pull request.
 
-```http
-GET /api/produtos/categoria/{categoria}
-```
+## License
 
-Retorna uma lista de produtos com base na categoria especificada.
-
-#### Categorias Disponíveis
-
-- COMPUTADOR
-- NOTEBOOK
-- SMARTPHONE
-- MONITOR
-- TECLADO
-- MOUSE
-- HEADSET
-- PLACA_DE_VIDEO
-- PROCESSADOR
-- MEMORIA_RAM
-- ARMAZENAMENTO
-- OUTROS
-
-#### Exemplo de Solicitação
-
-```http
-GET /api/produtos/categoria/outros
-```
-#
-### Consultar Produtos por Marca
-
-#### Endpoint
-
-```http
-GET /api/produtos/marca/{marca}
-```
-
-Retorna uma lista de produtos com base na marca especificada.
-
-#### Exemplo de Solicitação
-
-```http
-GET /api/produtos/marca/samsung
-```
-#
-### Criar um Novo Produto
-
-#### Endpoint
-
-```http
-POST /api/produtos
-```
-
-Cria um novo produto com base nos dados fornecidos no corpo da solicitação.
-
-#### Exemplo de Corpo da Solicitação
-
-```json
-{
-  "categoria": "SMARTPHONE",
-  "nome": "Samsung Galaxy S21",
-  "marcaProduto": "Samsung",
-  "preco": 899.99,
-  "temDesconto": false,
-  "precoComDesconto": null,
-  "parcelas": 10,
-  "freteGratis": true,
-  "imgUrl": "https://images.pexels.com/photos/4549408/pexels-photo-4549408.jpeg"
-}
-```
-#
-### Atualizar um Produto Existente
-
-#### Endpoint
-
-```http
-PUT /api/produtos/{id}
-```
-
-Atualiza um produto existente com base no ID fornecido e nos dados fornecidos no corpo da solicitação.
-
-#### Exemplo de Corpo da Solicitação
-
-```json
-{
-  "id": 6,
-  "categoria": "PLACA_DE_VIDEO",
-  "nome": "NVIDIA GeForce RTX 3080",
-  "marcaProduto": "NVIDIA",
-  "preco": 2799.99,
-  "temDesconto": false,
-  "precoComDesconto": null,
-  "parcelas": 12,
-  "freteGratis": false,
-  "imgUrl": "https://images.pexels.com/photos/6716692/pexels-photo-6716692.jpeg"
-}
-```
-#
-### Excluir um Produto
-
-#### Endpoint
-
-```http
-DELETE /api/produtos/{id}
-```
-
-Exclui um produto existente com base no ID fornecido.
-
-#
-## Respostas da API
-
-A API retornará respostas com os seguintes códigos de status:
-
-- `200 OK`: A solicitação foi bem-sucedida.
-- `201 Created`: Um novo recurso foi criado com sucesso (usado para POST).
-- `204 No Content`: A solicitação de exclusão foi bem-sucedida (usado para DELETE).
-- `400 Bad Request`: A solicitação foi malformada ou contém dados inválidos.
-- `404 Not Found`: O recurso solicitado não foi encontrado.
-- `500 Internal Server Error`: O servidor encontrou um erro interno.
----
-## Contato
-
-Se você tiver alguma dúvida, sugestão ou encontrar algum problema com esta API, sinta-se à vontade para entrar em contato via LinkedIn - <a href="https://www.linkedin.com/in/william-nogueira-dev" target="_blank">Clique Aqui
+This project is licensed under the MIT License. See the LICENSE file for details.
