@@ -1,7 +1,7 @@
 package dev.williamnogueira.ecommerce.domain.payment;
 
 import dev.williamnogueira.ecommerce.domain.payment.dto.PaymentRequest;
-import dev.williamnogueira.ecommerce.domain.payment.exceptions.PaymentException;
+import dev.williamnogueira.ecommerce.domain.payment.exceptions.PaymentProcessingException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -40,7 +40,7 @@ public class PaymentService {
                 .bodyToMono(String.class)
                 .doOnSuccess(response -> kafkaTemplate.send(PAYMENT_RESPONSE_TOPIC, orderId))
                 .doOnError(error -> {
-                    throw new PaymentException(String.format(ERROR_PROCESSING_PAYMENT, orderId, error.getMessage()));
+                    throw new PaymentProcessingException(String.format(ERROR_PROCESSING_PAYMENT, orderId, error.getMessage()));
                 })
                 .subscribe();
     }

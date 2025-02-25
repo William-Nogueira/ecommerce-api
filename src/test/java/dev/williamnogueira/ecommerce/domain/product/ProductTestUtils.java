@@ -10,64 +10,77 @@ import static dev.williamnogueira.ecommerce.utils.TestUtils.ID;
 public class ProductTestUtils {
 
     public static ProductEntity createProductEntity() {
-        var productEntity = new ProductEntity();
-        productEntity.setId(ID);
-        productEntity.setSku("INTEL CORE I9 5500");
-        productEntity.setName("Intel Core i9 5500 2.9GHZ");
-        productEntity.setLabel("Intel");
-        productEntity.setCategory(ProductCategoryEnum.CPU);
-        productEntity.setPrice(new BigDecimal(1200));
-        productEntity.setDiscount(new BigDecimal(10));
-        productEntity.setInstallments((byte) 2);
-        productEntity.setActive(true);
-        return productEntity;
+        return ProductEntity.builder()
+                .id(ID)
+                .sku("INTEL CORE I9 5500")
+                .name("Intel Core i9 5500 2.9GHZ")
+                .label("Intel")
+                .category(ProductCategoryEnum.CPU)
+                .price(new BigDecimal(1200))
+                .discount(new BigDecimal(10))
+                .installments((byte) 2)
+                .stockQuantity(10)
+                .active(true)
+                .build();
     }
 
     public static ProductResponseDTO createProductResponseDTO() {
-        return new ProductResponseDTO(ID,
-                "INTEL CORE I9 5500",
-                "Intel Core i9 5500 2.9GHZ",
-                "Intel",
-                "CPU",
-                new BigDecimal(1200),
-                new BigDecimal(10),
-                10,
-                (byte) 2);
+        ProductEntity product = createProductEntity();
+        return new ProductResponseDTO(
+                product.getId(),
+                product.getSku(),
+                product.getName(),
+                product.getLabel(),
+                product.getCategory().name(),
+                product.getPrice(),
+                product.getDiscount(),
+                product.getStockQuantity(),
+                product.getInstallments()
+        );
     }
 
     public static ProductRequestDTO createProductRequestDTO() {
-        return new ProductRequestDTO("INTEL CORE I9 5500",
-                "Intel Core i9 5500 2.9GHZ",
-                "Intel",
-                "CPU",
-                new BigDecimal(1200),
-                new BigDecimal(10),
-                (byte) 2,
-                10,
-                true);
+        ProductEntity product = createProductEntity();
+        return new ProductRequestDTO(
+                product.getSku(),
+                product.getName(),
+                product.getLabel(),
+                product.getCategory().name(),
+                product.getPrice(),
+                product.getDiscount(),
+                product.getInstallments(),
+                product.getStockQuantity(),
+                product.getActive()
+        );
     }
 
     public static ProductRequestDTO createProductWithNewSku() {
-        return new ProductRequestDTO("INTEL CORE I9 5500 NEW",
-                "Intel Core i9 5500 2.9GHZ",
-                "Intel",
-                "CPU",
-                new BigDecimal(1200),
-                new BigDecimal(10),
-                (byte) 2,
-                10,
-                true);
+        ProductEntity product = createProductEntity();
+        return new ProductRequestDTO(
+                product.getSku() + " NEW",
+                product.getName(),
+                product.getLabel(),
+                product.getCategory().name(),
+                product.getPrice(),
+                product.getDiscount(),
+                product.getInstallments(),
+                product.getStockQuantity(),
+                product.getActive()
+        );
     }
 
     public static ProductRequestDTO createInvalidProductRequestDTO() {
-        return new ProductRequestDTO("INTEL CORE I9 5500",
-                "Intel Core i9 5500 2.9GHZ",
-                "Intel",
+        ProductEntity product = createProductEntity();
+        return new ProductRequestDTO(
+                product.getSku(),
+                product.getName(),
+                product.getLabel(),
                 "INVALID CATEGORY",
-                new BigDecimal(1200),
-                new BigDecimal(10),
-                (byte) 2,
-                10,
-                true);
+                product.getPrice(),
+                product.getDiscount(),
+                product.getInstallments(),
+                product.getStockQuantity(),
+                product.getActive()
+        );
     }
 }

@@ -1,7 +1,9 @@
 package dev.williamnogueira.ecommerce.domain.shoppingcart;
 
 import dev.williamnogueira.ecommerce.domain.customer.CustomerService;
+import dev.williamnogueira.ecommerce.domain.product.ProductEntity;
 import dev.williamnogueira.ecommerce.domain.product.ProductService;
+import dev.williamnogueira.ecommerce.domain.product.exceptions.ProductNotFoundException;
 import dev.williamnogueira.ecommerce.domain.shoppingcart.dto.ShoppingCartRequestDTO;
 import dev.williamnogueira.ecommerce.domain.shoppingcart.dto.ShoppingCartResponseDTO;
 import dev.williamnogueira.ecommerce.domain.shoppingcart.exceptions.NegativeQuantityException;
@@ -43,28 +45,8 @@ public class ShoppingCartService {
 
         var cart = findByCustomerId(request.customerId());
 
-        Optional<ShoppingCartItemEntity> existingItemOpt = cart.getItems().stream()
-                .filter(i -> i.getProduct().getId().equals(product.getId()))
-                .findFirst();
-
-        ShoppingCartItemEntity cartItem;
-        if (existingItemOpt.isPresent()) {
-            cartItem = existingItemOpt.get();
-            cartItem.setQuantity(cartItem.getQuantity() + request.quantity());
-        } else {
-            cartItem = ShoppingCartItemEntity.builder()
-                    .shoppingCart(cart)
-                    .product(product)
-                    .quantity(request.quantity())
-                    .priceAtAddedTime(product.getPrice())
-                    .build();
-            cart.getItems().add(cartItem);
-        }
-
-        var totalPrice = cart.getItems().stream()
-                .map(item -> item.getPriceAtAddedTime().multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        cart.setTotalPrice(totalPrice);
+        buildCartItems(request, cart, product);
+        updateTotalPrice(cart);
 
         shoppingCartRepository.save(cart);
         productService.subtractStockQuantity(product.getId(), request.quantity());
@@ -79,7 +61,7 @@ public class ShoppingCartService {
         var item = cart.getItems().stream()
                 .filter(i -> i.getProduct().getId().equals(request.productId()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format(PRODUCT_NOT_FOUND_WITH_ID, request.productId())));
+                .orElseThrow(() -> new ProductNotFoundException(String.format(PRODUCT_NOT_FOUND_WITH_ID, request.productId())));
 
         if (item.getQuantity() - request.quantity() < 0) {
             throw new NegativeQuantityException(NEGATIVE_QUANTITY);
@@ -92,10 +74,7 @@ public class ShoppingCartService {
             shoppingCartItemService.delete(item);
         }
 
-        var totalPrice = cart.getItems().stream()
-                .map(i -> i.getPriceAtAddedTime().multiply(BigDecimal.valueOf(i.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        cart.setTotalPrice(totalPrice);
+        updateTotalPrice(cart);
 
         shoppingCartRepository.save(cart);
         productService.addStockById(request.productId(), request.quantity());
@@ -124,6 +103,33 @@ public class ShoppingCartService {
     public ShoppingCartEntity getEntity(UUID id) {
         return shoppingCartRepository.findById(id)
                 .orElseThrow(() -> new ShoppingCartNotFoundException(String.format(SHOPPING_CART_NOT_FOUND_WITH_ID, id)));
+    }
+
+    private void buildCartItems(ShoppingCartRequestDTO request, ShoppingCartEntity cart, ProductEntity product) {
+        Optional<ShoppingCartItemEntity> existingItemOpt = cart.getItems().stream()
+                .filter(i -> i.getProduct().getId().equals(product.getId()))
+                .findFirst();
+
+        ShoppingCartItemEntity cartItem;
+        if (existingItemOpt.isPresent()) {
+            cartItem = existingItemOpt.get();
+            cartItem.setQuantity(cartItem.getQuantity() + request.quantity());
+        } else {
+            cartItem = ShoppingCartItemEntity.builder()
+                    .shoppingCart(cart)
+                    .product(product)
+                    .quantity(request.quantity())
+                    .priceAtAddedTime(product.getPrice())
+                    .build();
+            cart.getItems().add(cartItem);
+        }
+    }
+
+    private void updateTotalPrice(ShoppingCartEntity cart) {
+        var totalPrice = cart.getItems().stream()
+                .map(item -> item.getPriceAtAddedTime().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        cart.setTotalPrice(totalPrice);
     }
 
 }

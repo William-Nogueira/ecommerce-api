@@ -13,31 +13,35 @@ import static dev.williamnogueira.ecommerce.utils.TestUtils.ID;
 public class CustomerTestUtils {
 
     public static CustomerEntity createCustomerEntity() {
-        var customerEntity = new CustomerEntity();
-        customerEntity.setId(ID);
-        customerEntity.setName("John Doe");
-        customerEntity.setEmail("2xO1t@example.com");
-        customerEntity.setPhoneNumber("1234567890");
-        customerEntity.setAddress(List.of(createAddressEntity()));
-        customerEntity.setActive(true);
-        return customerEntity;
+        return CustomerEntity.builder()
+                .id(ID)
+                .name("John Doe")
+                .email("john.doe@example.com")
+                .phoneNumber("1234567890")
+                .address(List.of(createAddressEntity()))
+                .active(true)
+                .build();
     }
 
     public static CustomerRequestDTO createCustomerRequestDTO() {
+        var customer = createCustomerEntity();
         return new CustomerRequestDTO(
-                "John Doe",
-                "2xO1t@example.com",
-                "1234567890",
+                customer.getName(),
+                customer.getEmail(),
+                customer.getPhoneNumber(),
                 List.of(createAddressRequestDTO()),
-                true);
+                customer.getActive());
     }
 
     public static CustomerResponseDTO createCustomerResponseDTO() {
-        return new CustomerResponseDTO(ID,
-                "John Doe",
-                "2xO1t@example.com",
-                "1234567890",
-                List.of(createAddressResponseDTO()));
+        var customer = createCustomerEntity();
+        return new CustomerResponseDTO(
+                customer.getId(),
+                customer.getName(),
+                customer.getEmail(),
+                customer.getPhoneNumber(),
+                List.of(createAddressResponseDTO())
+        );
     }
 
 }

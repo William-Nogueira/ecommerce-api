@@ -243,4 +243,31 @@ class ProductServiceTest {
         // act & assert
         assertThrows(ProductNotFoundException.class, () -> productService.getEntity(ID));
     }
+
+    @Test
+    void testAddStockById() {
+        // arrange
+        when(productRepository.findByIdAndActiveTrue(ID)).thenReturn(Optional.of(productEntity));
+        when(productMapper.toResponseDTO(productEntity)).thenReturn(productResponseDTO);
+
+        // act
+        var response = productService.addStockById(ID, 10);
+
+        // assert
+        assertThat(response).isNotNull().isEqualTo(productResponseDTO);
+        verify(productRepository).save(productEntity);
+    }
+
+    @Test
+    void testSubtractStockQuantity() {
+        // arrange
+        when(productRepository.findByIdAndActiveTrue(ID)).thenReturn(Optional.of(productEntity));
+
+        // act
+        productService.subtractStockQuantity(ID, 8);
+
+        // assert
+        assertThat(productEntity.getStockQuantity()).isEqualTo(2);
+        verify(productRepository).save(productEntity);
+    }
 }
